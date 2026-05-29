@@ -1,0 +1,67 @@
+name: 🚀 Deploy Changed Client & Notify n8n
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'clients/**'
+
+jobs:
+  detect-and-notify:
+    name: Detect Changed Client & Fire n8n Webhook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed client folder
+        id: detect
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD | grep '^clients/' | head -1)
+          if [ -z "$CHANGED" ]; then
+            echo "No client files changed."
+            echo "slug=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          SLUG=$(echo "$CHANGED" | cut -d'/' -f2)
+          echo "Detected client: $SLUG"
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+
+      - name: Read client meta.json
+        id: meta
+        if: steps.detect.outputs.slug != ''
+        run: |
+          META_FILE="clients/${{ steps.detect.outputs.slug }}/meta.json"
+          if [ ! -f "$META_FILE" ]; then
+            echo "No meta.json found for ${{ steps.detect.outputs.slug }}"
+            exit 0
+          fi
+          echo "business_name=$(jq -r .business_name $META_FILE)" >> $GITHUB_OUTPUT
+          echo "phone=$(jq -r .phone $META_FILE)" >> $GITHUB_OUTPUT
+          echo "city=$(jq -r .city $META_FILE)" >> $GITHUB_OUTPUT
+          echo "niche=$(jq -r .niche $META_FILE)" >> $GITHUB_OUTPUT
+          echo "owner_name=$(jq -r '.owner_name // "Unknown"' $META_FILE)" >> $GITHUB_OUTPUT
+          echo "pain_point=$(jq -r '.pain_point // "no website"' $META_FILE)" >> $GITHUB_OUTPUT
+          echo "website_url=$(jq -r '.website_url // "none"' $META_FILE)" >> $GITHUB_OUTPUT
+          echo "live_url=$(jq -r '.live_url // ""' $META_FILE)" >> $GITHUB_OUTPUT
+
+      - name: Fire n8n Sales Pipeline Webhook
+        if: steps.detect.outputs.slug != '' && steps.meta.outputs.business_name != ''
+        run: |
+          curl -s -X POST \
+            "https://wolfy1223-hugging8n.hf.space/webhook/nexus-pipeline" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "business_name": "${{ steps.meta.outputs.business_name }}",
+              "phone": "${{ steps.meta.outputs.phone }}",
+              "city": "${{ steps.meta.outputs.city }}",
+              "niche": "${{ steps.meta.outputs.niche }}",
+              "owner_name": "${{ steps.meta.outputs.owner_name }}",
+              "pain_point": "${{ steps.meta.outputs.pain_point }}",
+              "website_url": "${{ steps.meta.outputs.website_url }}",
+              "live_url": "${{ steps.meta.outputs.live_url }}"
+            }' \
+            && echo "✅ n8n webhook fired for ${{ steps.meta.outputs.business_name }}" \
+            || echo "⚠️  n8n webhook failed (pipeline will retry)"

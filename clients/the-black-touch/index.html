@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Black Touch — Mumbai's premier interior design studio crafting spaces that define luxury.">
+<meta property="og:title" content="The Black Touch | Interior Design Studio Mumbai">
+<meta property="og:description" content="Where architecture meets emotion. Premium 3D interior design experiences.">
+<title>The Black Touch | Interior Design Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--charcoal:#111111;--obsidian:#1a1a1a;--gold:#c9a96e;--gold-lt:#e8d5b0;--cream:#f5f0e8;--white:#ffffff;--muted:rgba(255,255,255,0.45);--border:rgba(201,169,110,0.2)}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--cream);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden}
+#canvas-container{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#bg-canvas{width:100%;height:100%;display:block}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:2rem 4rem;border-bottom:1px solid transparent;transition:all .4s ease}
+nav.scrolled{background:rgba(10,10,10,.92);backdrop-filter:blur(12px);border-color:var(--border);padding:1.2rem 4rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;letter-spacing:.12em;color:var(--white);text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:.7rem 1.8rem;text-decoration:none;transition:all .3s}
+.nav-cta:hover{background:var(--gold);color:var(--black)}
+#hero{position:relative;height:100vh;display:flex;align-items:flex-end;padding:0 4rem 6rem;z-index:1}
+.hero-content{max-width:700px;opacity:0;transform:translateY(30px);animation:fadeUp 1.2s ease .4s forwards}
+.hero-eyebrow{font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+.hero-eyebrow::before{content:'';width:40px;height:1px;background:var(--gold);display:block}
+.hero-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:300;line-height:1.05;color:var(--white);margin-bottom:1.5rem}
+.hero-headline em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:.8rem;letter-spacing:.08em;color:var(--muted);line-height:1.8;max-width:480px;margin-bottom:3rem}
+.hero-actions{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}
+.btn-primary{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:1rem 2.5rem;text-decoration:none;transition:all .3s;display:inline-block}
+.btn-primary:hover{background:var(--gold-lt)}
+.btn-ghost{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:.7rem;transition:color .3s}
+.btn-ghost:hover{color:var(--white)}
+.marquee-strip{position:relative;z-index:1;background:var(--obsidian);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.2rem 0;overflow:hidden;white-space:nowrap}
+.marquee-track{display:inline-flex;gap:4rem;animation:marquee 25s linear infinite;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.marquee-track span{color:var(--gold)}
+#services{position:relative;z-index:1;padding:8rem 4rem;background:var(--black)}
+.section-label{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:1rem}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:300;text-align:center;color:var(--white);margin-bottom:1rem}
+.section-title em{font-style:italic;color:var(--gold)}
+.section-sub{font-size:.75rem;letter-spacing:.05em;color:var(--muted);text-align:center;max-width:500px;margin:0 auto 4rem;line-height:1.8}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
+.service-card{background:var(--charcoal);padding:3rem 2.5rem;position:relative;overflow:hidden;transition:background .4s}
+.service-card::before{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--gold);transition:width .5s ease}
+.service-card:hover{background:var(--obsidian)}
+.service-card:hover::before{width:100%}
+.service-number{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:rgba(201,169,110,.1);line-height:1;margin-bottom:1.5rem}
+.service-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--white);margin-bottom:1rem;letter-spacing:.05em}
+.service-desc{font-size:.72rem;letter-spacing:.04em;color:var(--muted);line-height:1.9}
+#process{position:relative;z-index:1;padding:8rem 4rem;background:var(--obsidian)}
+.process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:3rem;margin-top:4rem}
+.process-step{text-align:center}
+.process-icon{width:64px;height:64px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold);position:relative}
+.process-icon::after{content:'';position:absolute;inset:4px;border:1px solid rgba(201,169,110,.1)}
+.process-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--white);margin-bottom:.75rem;letter-spacing:.05em}
+.process-desc{font-size:.68rem;color:var(--muted);line-height:1.8;letter-spacing:.04em}
+#testimonials{position:relative;z-index:1;padding:8rem 4rem;background:var(--black);text-align:center}
+.testimonial-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,3vw,2.2rem);font-weight:300;font-style:italic;color:var(--white);max-width:800px;margin:2rem auto;line-height:1.5}
+.testimonial-quote::before{content:'\201C';color:var(--gold);font-size:4rem;line-height:0;vertical-align:-1.5rem;margin-right:.2em}
+.testimonial-author{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold)}
+.testimonial-stars{color:var(--gold);font-size:.9rem;letter-spacing:.3em;margin-bottom:2rem}
+#cta{position:relative;z-index:1;padding:8rem 4rem;background:var(--charcoal);text-align:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cta-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,4rem);font-weight:300;color:var(--white);margin-bottom:1rem}
+.cta-headline em{color:var(--gold);font-style:italic}
+.cta-sub{font-size:.75rem;color:var(--muted);letter-spacing:.08em;margin-bottom:3rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.8}
+.cta-group{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.btn-gold{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--black);padding:1.1rem 3rem;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:500;text-decoration:none;display:inline-block;transition:background .3s}
+.btn-gold:hover{background:var(--gold-lt)}
+.btn-outline{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;background:transparent;color:var(--gold);padding:1.1rem 3rem;border:1px solid var(--gold);cursor:pointer;font-family:'Montserrat',sans-serif;text-decoration:none;display:inline-block;transition:all .3s}
+.btn-outline:hover{background:rgba(201,169,110,.08)}
+footer{position:relative;z-index:1;background:var(--black);padding:4rem 4rem 2rem;border-top:1px solid var(--border)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4rem;margin-bottom:3rem}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--white);margin-bottom:1rem;letter-spacing:.1em}
+.footer-brand span{color:var(--gold)}
+.footer-tagline{font-size:.68rem;color:var(--muted);line-height:1.8;letter-spacing:.04em;max-width:280px}
+.footer-heading{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.footer-links a{font-size:.72rem;color:var(--muted);text-decoration:none;letter-spacing:.05em;transition:color .3s}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:.6rem;color:rgba(255,255,255,.2);letter-spacing:.1em}
+.nexus-badge{font-size:.55rem;letter-spacing:.2em;color:rgba(201,169,110,.35);text-transform:uppercase}
+.nexus-badge span{color:var(--gold)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:none}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:768px){nav{padding:1.5rem 1.5rem}nav.scrolled{padding:1rem 1.5rem}.nav-links{display:none}#hero{padding:0 1.5rem 5rem}#services,#process,#testimonials,#cta{padding:5rem 1.5rem}footer{padding:3rem 1.5rem 1.5rem}.footer-grid{grid-template-columns:1fr;gap:2.5rem}}
+</style>
+</head>
+<body>
+<div id="canvas-container"><canvas id="bg-canvas"></canvas></div>
+<nav id="nav">
+  <a href="#" class="nav-logo">The Black <span>Touch</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#testimonials">Projects</a></li>
+    <li><a href="#cta">Contact</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Book Consultation</a>
+</nav>
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Mumbai's Premium Interior Studio</div>
+    <h1 class="hero-headline">Where Every Space<br>Tells an <em>Untold</em><br>Story</h1>
+    <p class="hero-sub">We don't decorate rooms. We architect emotions — crafting interiors that move, inspire, and endure.</p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">Design My Space</a>
+      <a href="#services" class="btn-ghost">Explore Our Work</a>
+    </div>
+  </div>
+</section>
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span>Residential</span> · Luxury Interiors · <span>Commercial</span> · Office Design · <span>Hospitality</span> · Hotel &amp; Restaurant · <span>Bespoke</span> · Custom Furniture · <span>Mumbai</span> · Pan-India · <span>Residential</span> · Luxury Interiors · <span>Commercial</span> · Office Design · <span>Hospitality</span> · Hotel &amp; Restaurant · <span>Bespoke</span> · Custom Furniture ·
+  </div>
+</div>
+<section id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">Spaces Crafted with <em>Intention</em></h2>
+  <p class="section-sub">From concept to completion — no templates, no shortcuts.</p>
+  <div class="services-grid">
+    <div class="service-card reveal"><div class="service-number">01</div><div class="service-name">Luxury Residential</div><p class="service-desc">Homes that reflect your identity. We listen to how you live before we design how you'll feel.</p></div>
+    <div class="service-card reveal"><div class="service-number">02</div><div class="service-name">Commercial &amp; Office</div><p class="service-desc">Workspaces that elevate performance and brand perception. We design offices that attract talent.</p></div>
+    <div class="service-card reveal"><div class="service-number">03</div><div class="service-name">Hospitality Design</div><p class="service-desc">Hotels, restaurants, and cafés that guests remember. Atmospheres that become part of the experience.</p></div>
+    <div class="service-card reveal"><div class="service-number">04</div><div class="service-name">3D Visualisation</div><p class="service-desc">Photorealistic 3D renders — walk through your future interior before it exists.</p></div>
+    <div class="service-card reveal"><div class="service-number">05</div><div class="service-name">Bespoke Furniture</div><p class="service-desc">Sourced and designed to perfection. Every piece chosen with precision.</p></div>
+    <div class="service-card reveal"><div class="service-number">06</div><div class="service-name">Turnkey Execution</div><p class="service-desc">Design to delivery. We manage vendors, timelines, and quality — you just arrive.</p></div>
+  </div>
+</section>
+<section id="process">
+  <div class="section-label">How We Work</div>
+  <h2 class="section-title">The Black Touch <em>Method</em></h2>
+  <p class="section-sub">A precise four-stage process built for excellence.</p>
+  <div class="process-grid">
+    <div class="process-step reveal"><div class="process-icon">I</div><div class="process-title">Discovery</div><p class="process-desc">We begin by understanding you — your lifestyle, aspirations, and the feeling you want to wake up to.</p></div>
+    <div class="process-step reveal"><div class="process-icon">II</div><div class="process-title">Concept Design</div><p class="process-desc">Mood boards, spatial layouts, and a design language that is entirely yours.</p></div>
+    <div class="process-step reveal"><div class="process-icon">III</div><div class="process-title">3D Preview</div><p class="process-desc">Photorealistic walkthroughs. You see and approve before a single tile is laid.</p></div>
+    <div class="process-step reveal"><div class="process-icon">IV</div><div class="process-title">Flawless Delivery</div><p class="process-desc">Every contractor, material, deadline — managed. Your vision on time, zero compromise.</p></div>
+  </div>
+</section>
+<section id="testimonials">
+  <div class="section-label">Client Stories</div>
+  <div class="testimonial-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+  <blockquote class="testimonial-quote reveal">They didn't just redesign our apartment — they redesigned the way we live. Walking in now feels like stepping into a dream we didn't know we had.</blockquote>
+  <div class="testimonial-author">Priya &amp; Rohan Mehta — Bandra West, Mumbai</div>
+</section>
+<section id="cta">
+  <div class="section-label">Begin Your Journey</div>
+  <h2 class="cta-headline">Your Dream Space is<br><em>One Conversation Away</em></h2>
+  <p class="cta-sub">Book a free 30-minute consultation. No obligation, no pressure.</p>
+  <div class="cta-group">
+    <a href="tel:+918291017777" class="btn-gold">&#128222; Call Us Now</a>
+    <a href="https://wa.me/918291017777?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation." class="btn-outline" target="_blank">WhatsApp Us</a>
+  </div>
+  <p style="margin-top:2rem;font-size:.62rem;color:rgba(255,255,255,.2);letter-spacing:.12em">+91 82910 17777 &nbsp;&middot;&nbsp; Mumbai, Maharashtra</p>
+</section>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">The Black <span>Touch</span></div>
+      <p class="footer-tagline">Mumbai's premier interior design studio — crafting spaces that move you, define you, and stay with you.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <ul class="footer-links">
+        <li><a href="#services">Luxury Residential</a></li>
+        <li><a href="#services">Commercial Spaces</a></li>
+        <li><a href="#services">Hospitality Design</a></li>
+        <li><a href="#services">3D Visualisation</a></li>
+        <li><a href="#services">Turnkey Projects</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Studio</div>
+      <ul class="footer-links">
+        <li><a href="#process">Our Process</a></li>
+        <li><a href="#testimonials">Client Stories</a></li>
+        <li><a href="#cta">Book Consultation</a></li>
+        <li><a href="tel:+918291017777">+91 82910 17777</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2025 The Black Touch Interior Design Studio. Mumbai.</span>
+    <span class="nexus-badge">Crafted by <span>Nexus 3D Web Studio</span></span>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+const canvas=document.getElementById('bg-canvas');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setClearColor(0x000000,0);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,.1,200);
+camera.position.set(0,0,30);
+scene.add(new THREE.AmbientLight(0xffffff,.3));
+const gl=new THREE.PointLight(0xc9a96e,2,60);
+gl.position.set(10,10,10);
+scene.add(gl);
+scene.add(new THREE.PointLight(0x334466,1.5,60));
+const ms=[],GM=new THREE.MeshStandardMaterial({color:0xc9a96e,metalness:.9,roughness:.2}),WM=new THREE.MeshBasicMaterial({color:0xc9a96e,wireframe:true,transparent:true,opacity:.15}),DM=new THREE.MeshStandardMaterial({color:0x222222,metalness:.8,roughness:.3});
+function add(g,m,x,y,z){const mesh=new THREE.Mesh(g,m);mesh.position.set(x,y,z);scene.add(mesh);ms.push({m:mesh,sx:.001+Math.random()*.001,sy:.001+Math.random()*.001});}
+add(new THREE.BoxGeometry(3,3,3),GM,-14,6,-5);
+add(new THREE.BoxGeometry(2,2,2),WM,16,-3,-8);
+add(new THREE.BoxGeometry(1.5,5,1.5),DM,8,10,-12);
+add(new THREE.IcosahedronGeometry(2.5,1),WM,-5,-6,-8);
+add(new THREE.IcosahedronGeometry(1.5,0),GM,12,8,-6);
+add(new THREE.TorusGeometry(4,.15,16,60),WM,2,4,-10);
+add(new THREE.TorusGeometry(2,.08,16,60),GM,-8,-10,-5);
+const pg=new THREE.BufferGeometry(),pp=new Float32Array(2400);
+for(let i=0;i<800;i++){pp[i*3]=(Math.random()-.5)*80;pp[i*3+1]=(Math.random()-.5)*60;pp[i*3+2]=(Math.random()-.5)*40-10;}
+pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+scene.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xc9a96e,size:.06,transparent:true,opacity:.4})));
+let mx=0,my=0,sy=0;
+window.addEventListener('mousemove',e=>{mx=(e.clientX/window.innerWidth-.5)*2;my=(e.clientY/window.innerHeight-.5)*2;});
+window.addEventListener('scroll',()=>{sy=window.scrollY;});
+window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+const clk=new THREE.Clock();
+(function animate(){requestAnimationFrame(animate);const t=clk.getElapsedTime();camera.position.x+=(mx*2-camera.position.x)*.03;camera.position.y+=(-my-camera.position.y)*.03-sy*.008;camera.lookAt(0,-sy*.005,0);gl.position.x=Math.sin(t*.4)*12;gl.position.y=Math.cos(t*.3)*8;ms.forEach((o,i)=>{o.m.rotation.x+=o.sx;o.m.rotation.y+=o.sy;o.m.position.y+=Math.sin(t*.4+i)*.003;});renderer.render(scene,camera);})();
+document.getElementById('nav').addEventListener&&window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);});
+new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:.15}).observe&&document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:.15}).observe(el));
+})();
+</script>
+</body>
+</html>
